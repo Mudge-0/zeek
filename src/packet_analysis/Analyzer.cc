@@ -1,9 +1,10 @@
 // See the file "COPYING" in the main distribution directory for copyright.
 
-#include "Analyzer.h"
+#include "zeek/packet_analysis/Analyzer.h"
 
-#include "Dict.h"
-#include "DebugLogger.h"
+#include "zeek/Dict.h"
+#include "zeek/DebugLogger.h"
+#include "zeek/RunState.h"
 
 namespace zeek::packet_analysis {
 
@@ -109,6 +110,9 @@ void Analyzer::DumpDebug() const
 
 void Analyzer::RegisterProtocol(uint32_t identifier, AnalyzerPtr child)
 	{
+	if ( run_state::detail::zeek_init_done )
+		reporter->FatalError("Packet protocols cannot be registered after zeek_init has finished.");
+
 	dispatcher.Register(identifier, std::move(child));
 	}
 
