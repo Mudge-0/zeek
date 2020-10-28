@@ -17,7 +17,7 @@ export {
 		ts:           time     &log;
 		##
 		analyzer:     string   &log;
-		protocol:     string   &log;
+		protocol_id:  string   &log;
 		first_bytes:  string   &log;
 	};
 
@@ -46,7 +46,7 @@ event unknown_protocol(analyzer_name: string, protocol: count, first_bytes: stri
 	local info : Info;
 	info$ts = network_time();
 	info$analyzer = analyzer_name;
-	info$protocol = fmt("0x%x", protocol);
+	info$protocol_id = fmt("0x%x", protocol);
 	info$first_bytes = first_bytes;
 
 	Log::write(LOG, info);

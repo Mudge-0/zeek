@@ -5,7 +5,7 @@
 #unset_field	-
 #path	unknown_protocols
 #open XXXX-XX-XX-XX-XX-XX
-#fields	ts	analyzer	protocol	first_bytes
+#fields	ts	analyzer	protocol_id	first_bytes
 #types	time	string	string	string
 XXXXXXXXXX.XXXXXX	IP	0x87	3b010600d1da0080002a
 #close XXXX-XX-XX-XX-XX-XX

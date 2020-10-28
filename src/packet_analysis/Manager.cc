@@ -183,11 +183,13 @@ void Manager::DumpPacket(const Packet *pkt, int len)
 	run_state::detail::pkt_dumper->Dump(pkt);
 	}
 
-class UnknownProtocolTimerTimer final : public zeek::detail::Timer {
+class UnknownProtocolTimer final : public zeek::detail::Timer {
 public:
+	// Represents a combination of an analyzer name and protocol identifier, where the identifier was
+	// reported as unknown by the analyzer.
 	using UnknownProtocolPair = std::pair<std::string, uint32_t>;
 
-	UnknownProtocolTimerTimer(double t, UnknownProtocolPair p, double timeout)
+	UnknownProtocolTimer(double t, UnknownProtocolPair p, double timeout)
 		: zeek::detail::Timer(t + timeout, zeek::detail::TIMER_UNKNOWN_PROTOCOL_EXPIRE),
 		  unknown_protocol(std::move(p))
 		{}
@@ -210,8 +212,8 @@ bool Manager::PermitUnknownProtocol(const std::string& analyzer, uint32_t protoc
 	++count;
 
 	if ( count == 1 )
-		detail::timer_mgr->Add(new UnknownProtocolTimerTimer(run_state::network_time, p,
-		                                                     unknown_sampling_duration));
+		detail::timer_mgr->Add(new UnknownProtocolTimer(run_state::network_time, p,
+		                                                unknown_sampling_duration));
 
 	if ( count < unknown_sampling_threshold )
 		return true;
